@@ -20,8 +20,8 @@
           "xlsx": "https://esm.sh/xlsx@0.18.5",
           "@radix-ui/react-dialog": "https://esm.sh/@radix-ui/react-dialog@1.1.4?external=react,react-dom",
           "@radix-ui/react-select": "https://esm.sh/@radix-ui/react-select@2.2.5?external=react,react-dom",
-          "@winm2m/react-stats-ui": "https://esm.sh/@winm2m/react-stats-ui?external=react,react/jsx-runtime,react-dom,i18next,react-i18next,@radix-ui/react-select,@radix-ui/react-dialog,lucide-react,xlsx",
-          "@winm2m/react-data-workspace": "https://esm.sh/@winm2m/react-data-workspace?external=react,react/jsx-runtime,react-dom,i18next,react-i18next,zustand,@radix-ui/react-dialog,@radix-ui/react-select,@winm2m/react-stats-ui,lucide-react"
+          "@winm2m/react-stats-ui": "https://cdn.jsdelivr.net/gh/WinM2M/react-stats-ui@main/dist/index.js?module",
+          "@winm2m/react-data-workspace": "https://cdn.jsdelivr.net/gh/WinM2M/react-data-workspace@main/dist/index.js?module"
         }
       }
     </script>
@@ -38,6 +38,22 @@
   </head>
   <body>
     <div id="app"></div>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("dev") === "true") {
+        const cacheBust = Date.now();
+        const devImportMap = {
+          imports: {
+            "@winm2m/react-data-workspace": `/dist/index.js?v=${cacheBust}`,
+            "@winm2m/react-stats-ui": `/node_modules/@winm2m/react-stats-ui/dist/index.js?v=${cacheBust}`
+          }
+        };
+        const script = document.createElement("script");
+        script.type = "importmap";
+        script.textContent = JSON.stringify(devImportMap);
+        document.currentScript.after(script);
+      }
+    </script>
 
     <script type="module">
       import React from "react";
@@ -45,26 +61,10 @@
 
       const params = new URLSearchParams(window.location.search);
       const useDevBuild = params.get("dev") === "true";
+      console.info("[demo] dev query", { useDevBuild }, window.location.href);
       window.__WINM2M_INFERENTIAL_WORKER_URL__ = "https://cdn.jsdelivr.net/npm/@winm2m/inferential-stats-js@1.5.0/dist/stats-worker.js";
 
-      const cdnSpecifier = `https://cdn.jsdelivr.net/npm/@winm2m/react-data-workspace@0.1.0/dist/index.js`;
-
-      async function loadWorkspaceModule() {
-        console.info("[demo] dev query", { useDevBuild }, window.location.href);
-        if (useDevBuild) {
-          try {
-            const localModule = `/dist/index.js?v=${Date.now()}`;
-            console.info("[demo] loading local dist build", localModule);
-            return await import(localModule);
-          } catch (error) {
-            console.warn("[demo] failed to load local dist build", error);
-          }
-        }
-        console.info("[demo] loading CDN build", cdnSpecifier);
-        return import(`${cdnSpecifier}?module`);
-      }
-
-      const { DataWorkspace, createStatsWorkbenchPlugin } = await loadWorkspaceModule();
+      const { DataWorkspace, createStatsWorkbenchPlugin } = await import("@winm2m/react-data-workspace");
 
       const demoData = [
         { city: "Seoul", temperature: 23.4, humidity: 46, condition: "Sunny" },
