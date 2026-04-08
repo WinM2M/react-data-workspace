@@ -47,14 +47,15 @@
       const useDevBuild = params.get("dev") === "true";
       window.__WINM2M_INFERENTIAL_WORKER_URL__ = "https://cdn.jsdelivr.net/npm/@winm2m/inferential-stats-js@1.5.0/dist/stats-worker.js";
 
-      const localDistSpecifier = `/dist/index.js?v=${Date.now()}`;
-      const cdnSpecifier = `https://cdn.jsdelivr.net/npm/@winm2m/react-data-workspace@latest/dist/index.js`;
+      const cdnSpecifier = `https://cdn.jsdelivr.net/npm/@winm2m/react-data-workspace@0.1.0/dist/index.js`;
 
       async function loadWorkspaceModule() {
+        console.info("[demo] dev query", { useDevBuild }, window.location.href);
         if (useDevBuild) {
           try {
-            console.info("[demo] loading local dist build", localDistSpecifier);
-            return await import(localDistSpecifier);
+            const localModule = `/dist/index.js?v=${Date.now()}`;
+            console.info("[demo] loading local dist build", localModule);
+            return await import(localModule);
           } catch (error) {
             console.warn("[demo] failed to load local dist build", error);
           }
