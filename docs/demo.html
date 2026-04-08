@@ -20,14 +20,15 @@
           "xlsx": "https://esm.sh/xlsx@0.18.5",
           "@radix-ui/react-dialog": "https://esm.sh/@radix-ui/react-dialog@1.1.4?external=react,react-dom",
           "@radix-ui/react-select": "https://esm.sh/@radix-ui/react-select@2.2.5?external=react,react-dom",
-          "@winm2m/react-stats-ui": "https://esm.sh/@winm2m/react-stats-ui@0.7.0?external=react,react/jsx-runtime,react-dom,i18next,react-i18next,@radix-ui/react-select,@radix-ui/react-dialog,lucide-react,xlsx",
-          "@winm2m/react-data-workspace": "https://esm.sh/@winm2m/react-data-workspace@0.1.0?external=react,react/jsx-runtime,react-dom,i18next,react-i18next,zustand,@radix-ui/react-dialog,@radix-ui/react-select,@winm2m/react-stats-ui,lucide-react"
+          "@winm2m/react-stats-ui": "https://cdn.jsdelivr.net/gh/WinM2M/react-stats-ui@main/dist/index.js",
+          "@winm2m/react-data-workspace": "https://cdn.jsdelivr.net/gh/WinM2M/react-data-workspace@main/dist/index.js"
         }
       }
     </script>
     <script>
       const params = new URLSearchParams(window.location.search);
-      if (params.get("dev") === "true") {
+      const useDevBuild = params.get("dev") === "true";
+      if (useDevBuild) {
         const cacheBust = Date.now();
         const devImportMap = {
           imports: {
