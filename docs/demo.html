@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>React Data Workspace Demo</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%230064ff'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Arial' font-size='16' fill='white'%3ED%3C/text%3E%3C/svg%3E" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="importmap">
       {
@@ -46,17 +47,20 @@
       const useDevBuild = params.get("dev") === "true";
       window.__WINM2M_INFERENTIAL_WORKER_URL__ = "https://cdn.jsdelivr.net/npm/@winm2m/inferential-stats-js@1.5.0/dist/stats-worker.js";
 
+      const localDistSpecifier = `/dist/index.js?v=${Date.now()}`;
+      const cdnSpecifier = `https://cdn.jsdelivr.net/npm/@winm2m/react-data-workspace@latest/dist/index.js`;
+
       async function loadWorkspaceModule() {
-        if (!useDevBuild) {
-          return import("@winm2m/react-data-workspace");
+        if (useDevBuild) {
+          try {
+            console.info("[demo] loading local dist build", localDistSpecifier);
+            return await import(localDistSpecifier);
+          } catch (error) {
+            console.warn("[demo] failed to load local dist build", error);
+          }
         }
-        try {
-          console.info("[demo] loading local /dist build");
-          return await import("/dist/index.js");
-        } catch (error) {
-          console.warn("[demo] failed to load local dist build, falling back to CDN", error);
-          return import("@winm2m/react-data-workspace");
-        }
+        console.info("[demo] loading CDN build", cdnSpecifier);
+        return import(`${cdnSpecifier}?module`);
       }
 
       const { DataWorkspace, createStatsWorkbenchPlugin } = await loadWorkspaceModule();
