@@ -44,9 +44,22 @@
 
       const params = new URLSearchParams(window.location.search);
       const useDevBuild = params.get("dev") === "true";
-      const packageSpecifier = useDevBuild ? "/dist/index.js" : "@winm2m/react-data-workspace";
       window.__WINM2M_INFERENTIAL_WORKER_URL__ = "https://cdn.jsdelivr.net/npm/@winm2m/inferential-stats-js@1.5.0/dist/stats-worker.js";
-      const { DataWorkspace, createStatsWorkbenchPlugin } = await import(packageSpecifier);
+
+      async function loadWorkspaceModule() {
+        if (!useDevBuild) {
+          return import("@winm2m/react-data-workspace");
+        }
+        try {
+          console.info("[demo] loading local /dist build");
+          return await import("/dist/index.js");
+        } catch (error) {
+          console.warn("[demo] failed to load local dist build, falling back to CDN", error);
+          return import("@winm2m/react-data-workspace");
+        }
+      }
+
+      const { DataWorkspace, createStatsWorkbenchPlugin } = await loadWorkspaceModule();
 
       const demoData = [
         { city: "Seoul", temperature: 23.4, humidity: 46, condition: "Sunny" },
