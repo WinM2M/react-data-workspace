@@ -20,24 +20,11 @@
           "xlsx": "https://esm.sh/xlsx@0.18.5",
           "@radix-ui/react-dialog": "https://esm.sh/@radix-ui/react-dialog@1.1.4?external=react,react-dom",
           "@radix-ui/react-select": "https://esm.sh/@radix-ui/react-select@2.2.5?external=react,react-dom",
-          "@winm2m/react-stats-ui": "https://cdn.jsdelivr.net/gh/WinM2M/react-stats-ui@main/dist/index.js?module",
-          "@winm2m/react-data-workspace": "https://cdn.jsdelivr.net/gh/WinM2M/react-data-workspace@main/dist/index.js?module"
+          "@winm2m/react-stats-ui": "https://esm.sh/@winm2m/react-stats-ui@0.7.0?external=react,react/jsx-runtime,react-dom,i18next,react-i18next,@radix-ui/react-select,@radix-ui/react-dialog,lucide-react,xlsx",
+          "@winm2m/react-data-workspace": "https://esm.sh/@winm2m/react-data-workspace@0.1.0?external=react,react/jsx-runtime,react-dom,i18next,react-i18next,zustand,@radix-ui/react-dialog,@radix-ui/react-select,@winm2m/react-stats-ui,lucide-react"
         }
       }
     </script>
-    <style>
-      html,
-      body,
-      #app {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        background: #0f172a;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="app"></div>
     <script>
       const params = new URLSearchParams(window.location.search);
       if (params.get("dev") === "true") {
@@ -54,6 +41,19 @@
         document.currentScript.after(script);
       }
     </script>
+    <style>
+      html,
+      body,
+      #app {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        background: #0f172a;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
 
     <script type="module">
       import React from "react";
