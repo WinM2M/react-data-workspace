@@ -132,10 +132,10 @@ export function WorkspaceLayout({
           ) : null}
 
           <section className="flex min-h-0 flex-1 divide-x divide-slate-200 dark:divide-slate-800">
-            <div className="flex min-h-0 flex-1 flex-col bg-white p-6 dark:bg-slate-950">
-              <div className="h-full min-h-0">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white p-6 dark:bg-slate-950">
+              <div className="h-full min-h-0 overflow-auto">
                 {activePlugin?.renderView ? (
-                  <div className="h-full min-h-0 overflow-hidden">{activePlugin.renderView()}</div>
+                  <div className="min-h-full">{activePlugin.renderView()}</div>
                 ) : (
                   <div className="flex h-full items-center justify-center text-sm text-slate-500">
                     Select a plugin to get started.
