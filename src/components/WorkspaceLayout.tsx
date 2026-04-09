@@ -1,6 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import * as Select from "@radix-ui/react-select";
-import { Check, ChevronDown, Moon, Settings, Sun, X } from "lucide-react";
+import { Moon, Settings, Sun, X } from "lucide-react";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { SharedVariableList } from "@winm2m/react-stats-ui";
@@ -81,11 +80,22 @@ export function WorkspaceLayout({
     () => datasets.find((dataset) => dataset.id === selectedDatasetId) ?? datasets[0] ?? null,
     [datasets, selectedDatasetId]
   );
+  const isDark = theme === "dark";
 
   return (
     <Dialog.Root open={isModalOpen} onOpenChange={(open) => (open ? undefined : closeModal())}>
-      <div className={cn("flex h-full min-h-screen bg-slate-100 text-slate-900 transition-colors", theme === "dark" && "bg-slate-900 text-slate-50")}> 
-        <aside className="flex w-16 flex-col border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+      <div
+        className={cn(
+          "flex h-full min-h-screen transition-colors",
+          isDark ? "bg-slate-950 text-slate-100" : "bg-slate-100 text-slate-900"
+        )}
+      >
+        <aside
+          className={cn(
+            "flex w-16 flex-col border-r",
+            isDark ? "border-slate-800 bg-slate-900 text-slate-100" : "border-slate-200 bg-white text-slate-900"
+          )}
+        >
           <ul className="flex-1 space-y-3 p-2">
             {plugins.map((plugin) => {
               const isActive = plugin.id === activePlugin?.id;
@@ -97,8 +107,12 @@ export function WorkspaceLayout({
                     className={cn(
                       "flex w-full items-center justify-center rounded-2xl p-2 text-[10px] font-semibold transition",
                       isActive
-                        ? "bg-slate-900 text-white shadow-lg dark:bg-slate-100 dark:text-slate-900"
-                        : "text-slate-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+                        ? isDark
+                          ? "bg-slate-100 text-slate-900 shadow-lg"
+                          : "bg-slate-900 text-white shadow-lg"
+                        : isDark
+                          ? "text-slate-200 hover:bg-slate-800"
+                          : "text-slate-600 hover:bg-slate-100"
                     )}
                     title={plugin.name}
                     aria-label={plugin.name}
@@ -112,11 +126,16 @@ export function WorkspaceLayout({
               );
             })}
           </ul>
-          <div className="border-t border-slate-200 p-3 dark:border-slate-800">
+          <div className={cn("border-t p-3", isDark ? "border-slate-800" : "border-slate-200")}>
             <button
               type="button"
               onClick={() => onToggleTheme()}
-              className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 px-2 py-2 text-[10px] font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800"
+              className={cn(
+                "flex w-full items-center justify-center gap-2 rounded-lg px-2 py-2 text-[10px] font-semibold transition",
+                isDark
+                  ? "border border-slate-700 text-slate-100 hover:bg-slate-800"
+                  : "border border-slate-200 text-slate-700 hover:bg-slate-50"
+              )}
             >
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               <span className="sr-only">{theme === "dark" ? t("theme.light") : t("theme.dark")}</span>
@@ -126,13 +145,23 @@ export function WorkspaceLayout({
 
         <main className="flex min-h-0 flex-1 flex-col">
           {plugins.some((plugin) => plugin.uiExtensions?.some((ext) => ext.slot === "DATASET_HEADER")) ? (
-            <div className="flex items-center gap-4 border-b border-slate-200 bg-white px-6 py-4 dark:border-slate-800 dark:bg-slate-950">
+            <div
+              className={cn(
+                "flex items-center gap-4 border-b px-6 py-4",
+                isDark ? "border-slate-800 bg-slate-900" : "border-slate-200 bg-white"
+              )}
+            >
               {renderExtensions(plugins, "DATASET_HEADER")}
             </div>
           ) : null}
 
-          <section className="flex min-h-0 flex-1 divide-x divide-slate-200 dark:divide-slate-800">
-            <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white p-6 dark:bg-slate-950">
+          <section className={cn("flex min-h-0 flex-1 divide-x", isDark ? "divide-slate-800" : "divide-slate-200")}>
+            <div
+              className={cn(
+                "flex min-h-0 flex-1 flex-col overflow-hidden p-6",
+                isDark ? "bg-slate-900 text-slate-100" : "bg-white text-slate-900"
+              )}
+            >
               <div className="h-full min-h-0 overflow-auto">
                 {activePlugin?.renderView ? (
                   <div className="min-h-full">{activePlugin.renderView()}</div>
@@ -143,7 +172,12 @@ export function WorkspaceLayout({
                 )}
               </div>
             </div>
-            <aside className="w-80 border-l border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
+            <aside
+              className={cn(
+                "w-80 border-l p-4",
+                isDark ? "border-slate-800 bg-slate-900 text-slate-100" : "border-slate-200 bg-slate-50 text-slate-900"
+              )}
+            >
               {fileInputRef ? (
                 <input ref={fileInputRef} type="file" accept=".xlsx,.json" onChange={onFileInput} hidden />
               ) : null}
@@ -159,6 +193,7 @@ export function WorkspaceLayout({
                     onDelete={onDeleteDataset}
                     className="w-full"
                     contentMaxWidth="min(420px, 100%)"
+                    isDark={isDark}
                     labels={{
                       title: t("dataset.title"),
                       importButton: t("dataset.import"),
@@ -181,7 +216,12 @@ export function WorkspaceLayout({
                   borderless
                 />
               ) : (
-                <div className="flex h-full flex-col items-center justify-center rounded-lg border border-dashed border-slate-300 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
+                <div
+                  className={cn(
+                    "flex h-full flex-col items-center justify-center rounded-lg border border-dashed text-center text-sm",
+                    isDark ? "border-slate-700 text-slate-400" : "border-slate-300 text-slate-500"
+                  )}
+                >
                   {t("dataset.empty")}
                 </div>
               )}

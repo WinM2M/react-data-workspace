@@ -5,9 +5,10 @@ import { cn } from "../utils/cn";
 
 type WorkspaceDatasetPopoverProps = SharedDatasetPopoverProps & {
   contentMaxWidth?: string;
+  isDark?: boolean;
 };
 
-export function WorkspaceDatasetPopover({ contentMaxWidth = "min(420px, 92vw)", className, ...props }: WorkspaceDatasetPopoverProps) {
+export function WorkspaceDatasetPopover({ contentMaxWidth = "min(420px, 92vw)", className, isDark = false, ...props }: WorkspaceDatasetPopoverProps) {
   const [open, setOpen] = React.useState(false);
   const [dragActive, setDragActive] = React.useState(false);
   const popoverRef = React.useRef<HTMLDivElement>(null);
@@ -55,8 +56,9 @@ export function WorkspaceDatasetPopover({ contentMaxWidth = "min(420px, 92vw)", 
           type="button"
           onClick={() => setOpen((prev) => !prev)}
           className={cn(
-            "inline-flex items-center gap-2 rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50",
-            props.borderlessButton ? "" : "border border-slate-300"
+            "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold shadow-sm",
+            props.borderlessButton ? "" : isDark ? "border border-slate-700" : "border border-slate-300",
+            isDark ? "bg-slate-900 text-slate-100 hover:bg-slate-800" : "bg-white text-slate-700 hover:bg-slate-50"
           )}
         >
           <Database className="h-4 w-4" />
@@ -69,16 +71,22 @@ export function WorkspaceDatasetPopover({ contentMaxWidth = "min(420px, 92vw)", 
 
       {open ? (
         <div
-          className="absolute left-0 top-[calc(100%+0.5rem)] z-30 rounded-xl border border-slate-200 bg-white p-3 shadow-lg"
+          className={cn(
+            "absolute left-0 top-[calc(100%+0.5rem)] z-30 rounded-xl border p-3 shadow-lg",
+            isDark ? "border-slate-700 bg-slate-900 text-slate-100" : "border-slate-200 bg-white text-slate-900"
+          )}
           style={{ width: contentMaxWidth, maxWidth: "100%" }}
         >
           <div className="mb-2 flex items-center justify-between">
-            <div className="text-sm font-semibold text-slate-800">{props.labels?.title ?? "Datasets"}</div>
+            <div className="text-sm font-semibold">{props.labels?.title ?? "Datasets"}</div>
             {props.onUploadClick ? (
               <button
                 type="button"
                 onClick={props.onUploadClick}
-                className="inline-flex items-center gap-1 rounded-md border border-slate-300 px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium",
+                  isDark ? "border border-slate-600 text-slate-100 hover:bg-slate-800" : "border border-slate-300 text-slate-700 hover:bg-slate-50"
+                )}
               >
                 <Upload className="h-3.5 w-3.5" />
                 {props.labels?.importButton ?? "Import .xlsx"}
@@ -101,7 +109,13 @@ export function WorkspaceDatasetPopover({ contentMaxWidth = "min(420px, 92vw)", 
                         }}
                         className={cn(
                           "flex min-w-0 flex-1 items-center gap-2 rounded px-2 py-1 text-left text-sm",
-                          active ? "bg-sky-100 text-sky-700" : "hover:bg-slate-50"
+                          active
+                            ? isDark
+                              ? "bg-slate-800 text-slate-100"
+                              : "bg-sky-100 text-sky-700"
+                            : isDark
+                              ? "hover:bg-slate-800"
+                              : "hover:bg-slate-50"
                         )}
                       >
                         <FileSpreadsheet className="h-4 w-4 shrink-0" />
@@ -111,7 +125,10 @@ export function WorkspaceDatasetPopover({ contentMaxWidth = "min(420px, 92vw)", 
                         <button
                           type="button"
                           onClick={() => props.onDelete?.(dataset.id)}
-                          className="rounded p-1 text-slate-500 hover:bg-red-50 hover:text-red-600"
+                          className={cn(
+                            "rounded p-1",
+                            isDark ? "text-slate-400 hover:bg-red-950 hover:text-red-400" : "text-slate-500 hover:bg-red-50 hover:text-red-600"
+                          )}
                           aria-label={deleteAria(dataset.name)}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -130,7 +147,11 @@ export function WorkspaceDatasetPopover({ contentMaxWidth = "min(420px, 92vw)", 
             <div
               className={cn(
                 "rounded-lg border border-dashed px-3 py-4 text-center text-xs text-slate-500 transition",
-                dragActive ? "border-sky-400 bg-sky-50 text-sky-700" : "border-slate-300"
+                dragActive
+                  ? isDark
+                    ? "border-slate-500 bg-slate-800 text-slate-100"
+                    : "border-sky-400 bg-sky-50 text-sky-700"
+                  : "border-slate-300"
               )}
               onDragEnter={(event) => {
                 event.preventDefault();
