@@ -47,6 +47,7 @@ export function createStatsWorkbenchPlugin(options: StatsWorkbenchPluginOptions 
   function StatsWorkbenchBridge() {
     const dataset = useWorkspaceStore((state) => state.dataset);
     const variables = useWorkspaceStore((state) => state.variables);
+    const currentTheme = useWorkspaceStore((state) => state.theme);
     const [ready, setReady] = React.useState(false);
 
     React.useEffect(() => {
@@ -67,12 +68,15 @@ export function createStatsWorkbenchPlugin(options: StatsWorkbenchPluginOptions 
     }, [dataset, variables]);
 
     return ready ? (
-      <StatsWorkbench
-        ref={workbenchRef}
-        hideInternalVariableList
-        showDatasetPopover={false}
-        className="h-full w-full overflow-auto"
-      />
+      <div className={cn("h-full w-full overflow-auto", currentTheme === "dark" && "dark bg-slate-950 text-slate-100")}> 
+        <StatsWorkbench
+          ref={workbenchRef}
+          hideInternalVariableList
+          showDatasetPopover={false}
+          className="h-full w-full"
+          data-theme={currentTheme}
+        />
+      </div>
     ) : null;
   }
 
