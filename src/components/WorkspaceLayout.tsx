@@ -174,7 +174,7 @@ export function WorkspaceLayout({
             </div>
             <aside
               className={cn(
-                "w-80 border-l p-4",
+                "w-80 border-l p-4 overflow-auto",
                 isDark ? "border-slate-800 bg-slate-900 text-slate-100" : "border-slate-200 bg-slate-50 text-slate-900"
               )}
             >

@@ -1,6 +1,6 @@
 {
   "name": "@winm2m/react-data-workspace",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Composable data workspace shell that embeds @winm2m/react-stats-ui plugins",
   "type": "module",
   "main": "dist/index.cjs",
