@@ -124,9 +124,11 @@ export function WorkspaceLayout({
         </aside>
 
         <main className="flex min-h-0 flex-1 flex-col">
-          <div className="flex items-center gap-4 border-b border-slate-200 bg-white px-6 py-4 dark:border-slate-800 dark:bg-slate-950">
-            {renderExtensions(plugins, "DATASET_HEADER")}
-          </div>
+          {plugins.some((plugin) => plugin.uiExtensions?.some((ext) => ext.slot === "DATASET_HEADER")) ? (
+            <div className="flex items-center gap-4 border-b border-slate-200 bg-white px-6 py-4 dark:border-slate-800 dark:bg-slate-950">
+              {renderExtensions(plugins, "DATASET_HEADER")}
+            </div>
+          ) : null}
 
           <section className="flex min-h-0 flex-1 divide-x divide-slate-200 dark:divide-slate-800">
             <div className="flex min-h-0 flex-1 flex-col bg-white p-6 dark:bg-slate-950">
