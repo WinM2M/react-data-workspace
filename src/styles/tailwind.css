@@ -6,6 +6,7 @@
   color-scheme: light;
 }
 
-.dark {
+.dark :root,
+.dark body {
   color-scheme: dark;
 }
