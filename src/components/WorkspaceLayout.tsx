@@ -157,6 +157,7 @@ export function WorkspaceLayout({
                     onDropFile={onDropDataset}
                     onDelete={onDeleteDataset}
                     className="w-full"
+                    alignViewport
                     labels={{
                       title: t("dataset.title"),
                       importButton: t("dataset.import"),
