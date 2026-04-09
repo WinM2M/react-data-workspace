@@ -124,32 +124,9 @@ export function WorkspaceLayout({
         </aside>
 
         <main className="flex min-h-0 flex-1 flex-col">
-          <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4 dark:border-slate-800 dark:bg-slate-950">
-            <div className="flex items-center gap-4">{renderExtensions(plugins, "DATASET_HEADER")}</div>
-            <div className="flex items-center gap-3">
-              {fileInputRef ? (
-                <input ref={fileInputRef} type="file" accept=".xlsx,.json" onChange={onFileInput} hidden />
-              ) : null}
-              {showDatasetPopover ? (
-                <SharedDatasetPopover
-                  datasets={datasets}
-                  selectedDatasetId={selectedDatasetId}
-                  selectedDatasetName={selectedDataset?.name ?? t("dataset.empty")}
-                  onSelect={onSelectDataset}
-                  onUploadClick={onUploadDataset}
-                  onDropFile={onDropDataset}
-                  borderlessButton
-                  onDelete={onDeleteDataset}
-                  labels={{
-                    title: t("dataset.title"),
-                    importButton: t("dataset.import"),
-                    dropHint: t("dataset.dropHint"),
-                    deleteAria: (name) => `${t("dataset.title")}: ${name}`
-                  }}
-                />
-              ) : null}
-            </div>
-          </header>
+          <div className="flex items-center gap-4 border-b border-slate-200 bg-white px-6 py-4 dark:border-slate-800 dark:bg-slate-950">
+            {renderExtensions(plugins, "DATASET_HEADER")}
+          </div>
 
           <section className="flex min-h-0 flex-1 divide-x divide-slate-200 dark:divide-slate-800">
             <div className="flex min-h-0 flex-1 flex-col bg-white p-6 dark:bg-slate-950">
@@ -164,6 +141,29 @@ export function WorkspaceLayout({
               </div>
             </div>
             <aside className="w-80 border-l border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
+              {fileInputRef ? (
+                <input ref={fileInputRef} type="file" accept=".xlsx,.json" onChange={onFileInput} hidden />
+              ) : null}
+              {showDatasetPopover ? (
+                <div className="mb-4">
+                  <SharedDatasetPopover
+                    datasets={datasets}
+                    selectedDatasetId={selectedDatasetId}
+                    selectedDatasetName={selectedDataset?.name ?? t("dataset.empty")}
+                    onSelect={onSelectDataset}
+                    onUploadClick={onUploadDataset}
+                    onDropFile={onDropDataset}
+                    onDelete={onDeleteDataset}
+                    className="w-full"
+                    labels={{
+                      title: t("dataset.title"),
+                      importButton: t("dataset.import"),
+                      dropHint: t("dataset.dropHint"),
+                      deleteAria: (name) => `${t("dataset.title")}: ${name}`
+                    }}
+                  />
+                </div>
+              ) : null}
               {selectedDataset ? (
                 <SharedVariableList
                   variables={variables}
