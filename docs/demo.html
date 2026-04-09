@@ -24,7 +24,7 @@
           "@radix-ui/react-dialog": "https://esm.sh/@radix-ui/react-dialog@1.1.4?external=react,react-dom",
           "@radix-ui/react-select": "https://esm.sh/@radix-ui/react-select@2.2.5?external=react,react-dom",
           "@radix-ui/react-tooltip": "https://esm.sh/@radix-ui/react-tooltip@1.2.8?external=react,react-dom",
-          "@winm2m/inferential-stats-js": "https://cdn.jsdelivr.net/npm/@winm2m/inferential-stats-js@1.5.0/dist/index.js",
+          "@winm2m/inferential-stats-js": "https://cdn.jsdelivr.net/npm/@winm2m/inferential-stats-js/dist/index.js",
           "@winm2m/react-stats-ui": "https://cdn.jsdelivr.net/gh/WinM2M/react-stats-ui@main/dist/index.js",
           "@winm2m/react-data-workspace": "https://cdn.jsdelivr.net/gh/WinM2M/react-data-workspace@main/dist/index.js"
         };
@@ -59,7 +59,7 @@
       const params = new URLSearchParams(window.location.search);
       const useDevBuild = params.get("dev") === "true";
       console.info("[demo] dev query", { useDevBuild }, window.location.href);
-      window.__WINM2M_INFERENTIAL_WORKER_URL__ = "https://cdn.jsdelivr.net/npm/@winm2m/inferential-stats-js@1.5.0/dist/stats-worker.js";
+      window.__WINM2M_INFERENTIAL_WORKER_URL__ = "https://cdn.jsdelivr.net/npm/@winm2m/inferential-stats-js/dist/stats-worker.js";
 
       const { DataWorkspace, createStatsWorkbenchPlugin } = await import("@winm2m/react-data-workspace");
 

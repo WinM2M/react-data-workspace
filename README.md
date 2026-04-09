@@ -20,7 +20,11 @@ npm install @winm2m/react-data-workspace @winm2m/react-stats-ui react react-dom
 ### Basic Usage
 
 ```tsx
-import { DataWorkspace, createStatsWorkbenchPlugin } from "@winm2m/react-data-workspace";
+import "@winm2m/react-data-workspace/dist/index.css";
+import {
+  DataWorkspace,
+  createStatsWorkbenchPlugin,
+} from "@winm2m/react-data-workspace";
 
 const plugins = [createStatsWorkbenchPlugin({ name: "Workbench" })];
 
@@ -35,6 +39,13 @@ export function App() {
   );
 }
 ```
+
+> **Note**
+>
+> Starting with this change the prebuilt Tailwind bundle is exported directly from the package, so
+> consumers no longer need to copy the CSS into their repositories. Import
+> `"@winm2m/react-data-workspace/dist/index.css"` once (ideally near your root layout) to scope the
+> workspace styles correctly without touching your existing Tailwind setup.
 
 ### Plugin Interface
 
@@ -58,13 +69,13 @@ Use the `capabilities` callbacks to receive double-click/selection events from t
 
 ### Commands
 
-| Command | Description |
-| --- | --- |
-| `npm run build` | Builds the library with `tsup` (ESM + CJS + d.ts). |
-| `npm run typecheck` | Runs strict TypeScript checking. |
-| `npm run storybook` | Launches Storybook with Tailwind + dark mode globals. |
-| `npm run test:jest` | Component/integration tests (React Testing Library). |
-| `npm run test:vitest` | Store-level unit tests via Vitest. |
+| Command               | Description                                           |
+| --------------------- | ----------------------------------------------------- |
+| `npm run build`       | Builds the library with `tsup` (ESM + CJS + d.ts).    |
+| `npm run typecheck`   | Runs strict TypeScript checking.                      |
+| `npm run storybook`   | Launches Storybook with Tailwind + dark mode globals. |
+| `npm run test:jest`   | Component/integration tests (React Testing Library).  |
+| `npm run test:vitest` | Store-level unit tests via Vitest.                    |
 
 ### Storybook
 
