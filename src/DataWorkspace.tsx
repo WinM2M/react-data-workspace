@@ -66,7 +66,14 @@ export function createStatsWorkbenchPlugin(options: StatsWorkbenchPluginOptions 
       });
     }, [dataset, variables]);
 
-    return ready ? <StatsWorkbench ref={workbenchRef} hideInternalVariableList showDatasetPopover={false} /> : null;
+    return ready ? (
+      <StatsWorkbench
+        ref={workbenchRef}
+        hideInternalVariableList
+        showDatasetPopover={false}
+        className="h-full w-full overflow-auto"
+      />
+    ) : null;
   }
 
   return {

@@ -49,8 +49,8 @@ export function WorkspaceDatasetPopover({ contentMaxWidth = "min(420px, 92vw)", 
   const deleteAria = props.labels?.deleteAria ?? ((name: string) => `Delete dataset ${name}`);
 
   return (
-    <section className={cn("relative ml-auto", className)} ref={popoverRef}>
-      <div className="flex items-center justify-end gap-2">
+    <section className={cn("relative w-full", className)} ref={popoverRef}>
+      <div className="flex items-center justify-between gap-2">
         <button
           type="button"
           onClick={() => setOpen((prev) => !prev)}
@@ -69,7 +69,7 @@ export function WorkspaceDatasetPopover({ contentMaxWidth = "min(420px, 92vw)", 
 
       {open ? (
         <div
-          className="absolute right-0 top-[calc(100%+0.5rem)] z-30 rounded-xl border border-slate-200 bg-white p-3 shadow-lg"
+          className="absolute left-0 top-[calc(100%+0.5rem)] z-30 rounded-xl border border-slate-200 bg-white p-3 shadow-lg"
           style={{ width: contentMaxWidth, maxWidth: "100%" }}
         >
           <div className="mb-2 flex items-center justify-between">
