@@ -6,7 +6,7 @@
     <title>React Data Workspace Demo</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%230064ff'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Arial' font-size='16' fill='white'%3ED%3C/text%3E%3C/svg%3E" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script id="workspace-importmap" type="importmap">
+    <script type="importmap">
       {
         "imports": {
           "react": "https://esm.sh/react@18.3.1",
@@ -30,11 +30,16 @@
       const useDevBuild = params.get("dev") === "true";
       if (useDevBuild) {
         const cacheBust = Date.now();
-        const importMapEl = document.getElementById("workspace-importmap");
-        const baseMap = JSON.parse(importMapEl.textContent);
-        baseMap.imports["@winm2m/react-data-workspace"] = `/dist/index.js?v=${cacheBust}`;
-        baseMap.imports["@winm2m/react-stats-ui"] = `/node_modules/@winm2m/react-stats-ui/dist/index.js?v=${cacheBust}`;
-        importMapEl.textContent = JSON.stringify(baseMap);
+        const devMap = {
+          imports: {
+            "@winm2m/react-data-workspace": `/dist/index.js?v=${cacheBust}`,
+            "@winm2m/react-stats-ui": `/node_modules/@winm2m/react-stats-ui/dist/index.js?v=${cacheBust}`
+          }
+        };
+        const overrideMap = document.createElement("script");
+        overrideMap.type = "importmap";
+        overrideMap.textContent = JSON.stringify(devMap);
+        document.currentScript.after(overrideMap);
       }
     </script>
     <style>
