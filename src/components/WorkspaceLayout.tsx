@@ -148,38 +148,6 @@ export function WorkspaceLayout({
                   }}
                 />
               ) : null}
-
-              <button
-                type="button"
-                onClick={() => onToggleTheme()}
-                className="inline-flex items-center rounded-lg border border-slate-200 p-2 text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
-                aria-label="Toggle theme"
-              >
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </button>
-
-              <Select.Root value={language} onValueChange={onLanguageChange}>
-                <Select.Trigger className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800">
-                  <span>{languages.find((entry) => entry.value === language)?.label ?? language.toUpperCase()}</span>
-                  <ChevronDown className="h-4 w-4 text-slate-500" />
-                </Select.Trigger>
-                <Select.Content className="z-50 rounded-lg border border-slate-200 bg-white p-1 shadow-xl dark:border-slate-700 dark:bg-slate-900">
-                  <Select.Viewport>
-                    {languages.map((option) => (
-                      <Select.Item
-                        key={option.value}
-                        value={option.value}
-                        className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 focus:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
-                      >
-                        <Select.ItemText>{option.label}</Select.ItemText>
-                        <Select.ItemIndicator>
-                          <Check className="h-4 w-4 text-sky-600" />
-                        </Select.ItemIndicator>
-                      </Select.Item>
-                    ))}
-                  </Select.Viewport>
-                </Select.Content>
-              </Select.Root>
             </div>
           </header>
 
