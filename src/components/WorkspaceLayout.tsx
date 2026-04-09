@@ -97,7 +97,7 @@ export function WorkspaceLayout({
                     className={cn(
                       "flex w-full items-center justify-center rounded-2xl p-2 text-[10px] font-semibold transition",
                       isActive
-                        ? "bg-sky-500 text-white shadow"
+                        ? "bg-slate-900 text-white shadow-lg dark:bg-slate-100 dark:text-slate-900"
                         : "text-slate-600 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                     )}
                     title={plugin.name}
