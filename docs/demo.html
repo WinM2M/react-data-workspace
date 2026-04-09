@@ -86,6 +86,12 @@
         const [showDatasetPopover, setShowDatasetPopover] = React.useState(true);
         const plugins = React.useMemo(() => [createStatsWorkbenchPlugin()], []);
 
+        React.useEffect(() => {
+          const root = document.documentElement;
+          root.classList.toggle("dark", theme === "dark");
+          return () => root.classList.remove("dark");
+        }, [theme]);
+
         return React.createElement(
           "div",
           {
