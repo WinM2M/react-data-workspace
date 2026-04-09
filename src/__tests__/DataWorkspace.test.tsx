@@ -35,13 +35,13 @@ describe("DataWorkspace", () => {
     const user = userEvent.setup();
     const { container } = renderWorkspace();
     await screen.findByTestId("mock-view");
-    const toggleButton = screen.getByRole("button", { name: /toggle theme/i });
+    const toggleButton = screen.getByRole("button", { name: /dark mode/i });
     await user.click(toggleButton);
     expect(container.querySelector(".dark")).toBeTruthy();
   });
 
   it("applies default language strings", async () => {
     renderWorkspace({ defaultLanguage: "ko" });
-    expect(await screen.findByText("전역 변수")).toBeInTheDocument();
+    expect(await screen.findByText("데이터셋이 없습니다")).toBeInTheDocument();
   });
 });

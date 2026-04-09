@@ -3,10 +3,11 @@ import * as Select from "@radix-ui/react-select";
 import { Check, ChevronDown, Moon, Settings, Sun, X } from "lucide-react";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { SharedDatasetPopover, SharedVariableList } from "@winm2m/react-stats-ui";
+import { SharedVariableList } from "@winm2m/react-stats-ui";
 import type { WorkspacePlugin, UISlot } from "../types/plugin";
 import { cn } from "../utils/cn";
 import type { VariableMetadata as VariableMeta, WorkspaceDataset as Dataset } from "../types/data";
+import { WorkspaceDatasetPopover } from "./WorkspaceDatasetPopover";
 
 export type LanguageOption = {
   value: string;
@@ -148,7 +149,7 @@ export function WorkspaceLayout({
               ) : null}
               {showDatasetPopover ? (
                 <div className="mb-4">
-                  <SharedDatasetPopover
+                  <WorkspaceDatasetPopover
                     datasets={datasets}
                     selectedDatasetId={selectedDatasetId}
                     selectedDatasetName={selectedDataset?.name ?? t("dataset.empty")}
@@ -157,7 +158,7 @@ export function WorkspaceLayout({
                     onDropFile={onDropDataset}
                     onDelete={onDeleteDataset}
                     className="w-full"
-                    alignViewport
+                    contentMaxWidth="min(420px, 100%)"
                     labels={{
                       title: t("dataset.title"),
                       importButton: t("dataset.import"),
