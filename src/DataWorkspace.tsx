@@ -8,7 +8,7 @@ import { useWorkspaceStore } from "./store/useWorkspaceStore";
 import type { WorkspacePlugin } from "./types/plugin";
 import { cn } from "./utils/cn";
 import type { WorkspaceDataset } from "./types/data";
-import { createDatasetFromRows, parseDatasetFile } from "./utils/dataset";
+import { parseDatasetFile } from "./utils/dataset";
 import { deleteDataset, getStoredDatasets, saveDataset } from "./storage/datasetStore";
 import "./styles/tailwind.css";
 
@@ -104,12 +104,7 @@ export function DataWorkspace({
   React.useEffect(() => {
     let cancelled = false;
     const syncDatasets = async () => {
-      let stored = await getStoredDatasets();
-      if (!stored.length && initialData.length) {
-        const seeded = createDatasetFromRows(initialData, "Initial dataset");
-        await saveDataset(seeded);
-        stored = [seeded];
-      }
+      const stored = await getStoredDatasets();
       if (cancelled) {
         return;
       }
