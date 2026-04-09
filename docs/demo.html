@@ -49,7 +49,7 @@
       }
     </style>
   </head>
-  <body>
+  <body style="height: 100vh; overflow: hidden;">
     <div id="app"></div>
 
     <script type="module">
@@ -89,7 +89,7 @@
         return React.createElement(
           "div",
           {
-            className: `flex h-full flex-col gap-4 bg-gradient-to-br ${theme === "dark" ? "from-slate-950 via-slate-900 to-slate-800" : "from-slate-100 via-white to-slate-50"} p-4`
+            className: `flex h-full flex-col gap-4 p-4 ${theme === "dark" ? "bg-slate-900 text-slate-100" : "bg-gradient-to-br from-slate-100 via-white to-slate-50 text-slate-900"}`
           },
           React.createElement(
             "div",
