@@ -86,7 +86,7 @@ export function WorkspaceLayout({
     <Dialog.Root open={isModalOpen} onOpenChange={(open) => (open ? undefined : closeModal())}>
       <div
         className={cn(
-          "flex h-full min-h-screen transition-colors",
+          "flex h-full transition-colors",
           isDark ? "bg-slate-950 text-slate-100" : "bg-slate-100 text-slate-900"
         )}
       >

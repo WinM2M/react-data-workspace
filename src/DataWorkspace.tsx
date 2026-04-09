@@ -250,7 +250,7 @@ export function DataWorkspace({
     [activePlugin]
   );
 
-  const workspaceRootClass = React.useMemo(() => cn("min-h-screen w-full", theme === "dark" && "dark"), [theme]);
+  const workspaceRootClass = React.useMemo(() => cn("h-full w-full", theme === "dark" && "dark"), [theme]);
 
   return (
     <I18nextProvider i18n={i18nInstance}>
