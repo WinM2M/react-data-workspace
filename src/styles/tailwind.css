@@ -10,3 +10,24 @@
 .dark body {
   color-scheme: dark;
 }
+
+.dark [data-stats-workbench-root="true"] {
+  background-color: rgb(15 23 42 / 0.95);
+  color: rgb(226 232 240);
+}
+
+.dark [data-stats-workbench-root="true"] :is(.bg-white, .bg-slate-50, .bg-slate-100) {
+  background-color: rgb(15 23 42 / 0.8) !important;
+}
+
+.dark [data-stats-workbench-root="true"] :is(.text-slate-900, .text-slate-800, .text-slate-700, .text-slate-600) {
+  color: rgb(226 232 240) !important;
+}
+
+.dark [data-stats-workbench-root="true"] :is(.border-slate-200, .border-slate-300) {
+  border-color: rgb(71 85 105) !important;
+}
+
+.dark [data-stats-workbench-root="true"] :is(.bg-slate-200, .bg-slate-300) {
+  background-color: rgb(30 41 59) !important;
+}
