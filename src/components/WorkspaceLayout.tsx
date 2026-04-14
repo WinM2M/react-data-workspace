@@ -163,9 +163,19 @@ export function WorkspaceLayout({
               )}
             >
               <div className="h-full min-h-0 overflow-auto">
-                {activePlugin?.renderView ? (
-                  <div className="min-h-full">{activePlugin.renderView()}</div>
-                ) : (
+                {plugins.map((plugin) => {
+                  const isActive = plugin.id === activePlugin?.id;
+                  return plugin.renderView ? (
+                    <div
+                      key={plugin.id}
+                      className="min-h-full"
+                      style={{ display: isActive ? undefined : "none" }}
+                    >
+                      {plugin.renderView()}
+                    </div>
+                  ) : null;
+                })}
+                {!activePlugin?.renderView && (
                   <div className="flex h-full items-center justify-center text-sm text-slate-500">
                     Select a plugin to get started.
                   </div>

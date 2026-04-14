@@ -161,6 +161,50 @@ export function DataWorkspace({
     seededDatasetIdRef.current = selectedDataset.id;
   }, [selectedDataset, setDataset, setVariables]);
 
+  // Auto-persist Zustand store dataset/variables back to IndexedDB when they
+  // change (e.g. after a transform operation adds computed variables).
+  // Uses a debounce to avoid excessive writes.
+  const persistTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  React.useEffect(() => {
+    if (!seededDatasetIdRef.current || !dataset.length) {
+      return;
+    }
+    // Skip persistence if this is the initial seed (values match selectedDataset)
+    if (
+      selectedDataset &&
+      dataset === selectedDataset.rows &&
+      variables === selectedDataset.columns
+    ) {
+      return;
+    }
+    const datasetId = seededDatasetIdRef.current;
+
+    if (persistTimerRef.current) {
+      clearTimeout(persistTimerRef.current);
+    }
+    persistTimerRef.current = setTimeout(() => {
+      const target = availableDatasets.find((d) => d.id === datasetId);
+      if (!target) return;
+      const updated: WorkspaceDataset = {
+        ...target,
+        rows: dataset,
+        columns: variables,
+      };
+      void saveDataset(updated).then(() => {
+        setAvailableDatasets((prev) =>
+          prev.map((d) => (d.id === datasetId ? updated : d))
+        );
+      });
+    }, 300);
+
+    return () => {
+      if (persistTimerRef.current) {
+        clearTimeout(persistTimerRef.current);
+      }
+    };
+  }, [dataset, variables]);
+
   React.useEffect(() => {
     setSelectedVariable(null);
   }, [selectedDatasetId]);
