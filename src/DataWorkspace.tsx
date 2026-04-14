@@ -56,7 +56,7 @@ export function createStatsWorkbenchPlugin(options: StatsWorkbenchPluginOptions 
     }, []);
 
     React.useEffect(() => {
-      if (!dataset.length) {
+      if (!ready || !dataset.length) {
         return;
       }
       workbenchRef.current?.injectData({
@@ -65,7 +65,7 @@ export function createStatsWorkbenchPlugin(options: StatsWorkbenchPluginOptions 
         rows: dataset,
         columns: variables
       });
-    }, [dataset, variables]);
+    }, [dataset, variables, ready]);
 
     return ready ? (
       <div className={cn("h-full w-full overflow-auto", currentTheme === "dark" && "dark bg-slate-950 text-slate-100")}> 
@@ -138,14 +138,27 @@ export function DataWorkspace({
     [availableDatasets, selectedDatasetId]
   );
 
+  // Track which dataset ID has been seeded into the Zustand store.
+  // We only overwrite the store from IndexedDB when the selected dataset ID
+  // changes (user picks a different dataset) or on first load.
+  // This prevents computed/transformed variables from being wiped out
+  // when the selectedDataset reference changes due to re-fetching.
+  const seededDatasetIdRef = React.useRef<string | null>(null);
+
   React.useEffect(() => {
     if (!selectedDataset) {
       setDataset([]);
       setVariables([]);
+      seededDatasetIdRef.current = null;
+      return;
+    }
+    // Only seed from IndexedDB if this is a different dataset than what we already seeded
+    if (seededDatasetIdRef.current === selectedDataset.id) {
       return;
     }
     setDataset(selectedDataset.rows);
     setVariables(selectedDataset.columns);
+    seededDatasetIdRef.current = selectedDataset.id;
   }, [selectedDataset, setDataset, setVariables]);
 
   React.useEffect(() => {
