@@ -48,6 +48,16 @@ function renderExtensions(plugins: WorkspacePlugin[], slot: UISlot) {
     ));
 }
 
+/**
+ * Stable wrapper for a plugin's renderView() output.
+ * Calls renderView() once and caches the result so the component tree
+ * is never torn down / re-mounted across renders.
+ */
+function PluginViewSlot({ plugin }: { plugin: WorkspacePlugin }) {
+  const content = React.useMemo(() => plugin.renderView?.() ?? null, [plugin]);
+  return <>{content}</>;
+}
+
 export function WorkspaceLayout({
   plugins,
   activePluginId,
@@ -171,7 +181,7 @@ export function WorkspaceLayout({
                       className="min-h-full"
                       style={{ display: isActive ? undefined : "none" }}
                     >
-                      {plugin.renderView()}
+                      <PluginViewSlot plugin={plugin} />
                     </div>
                   ) : null;
                 })}

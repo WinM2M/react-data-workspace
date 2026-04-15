@@ -71,12 +71,21 @@ for (const lang of SUPPORTED_LANGUAGES) {
   }
 }
 
+/**
+ * Isolated i18next instance for the data workspace.
+ * Using createInstance() prevents collisions with the host app's
+ * global i18next singleton when both share the same i18next module
+ * (e.g. after Vite resolve.dedupe).
+ */
+let workspaceI18nInstance: ReturnType<typeof i18n.createInstance> | null = null;
+
 export function initWorkspaceI18n() {
-  if (i18n.isInitialized) {
-    return i18n;
+  if (workspaceI18nInstance) {
+    return workspaceI18nInstance;
   }
 
-  i18n.use(initReactI18next).init({
+  workspaceI18nInstance = i18n.createInstance();
+  workspaceI18nInstance.use(initReactI18next).init({
     resources: resources as unknown as typeof resources,
     lng: "en",
     fallbackLng: "en",
@@ -86,7 +95,7 @@ export function initWorkspaceI18n() {
     }
   });
 
-  return i18n;
+  return workspaceI18nInstance;
 }
 
 export default i18n;
