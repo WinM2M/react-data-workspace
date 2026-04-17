@@ -36,6 +36,8 @@ export type WorkspaceLayoutProps = {
   languages: LanguageOption[];
   onLanguageChange: (lang: string) => void;
   showThemeToggle?: boolean;
+  derivedNames?: Set<string>;
+  onDeleteVariable?: (name: string) => void;
   isModalOpen: boolean;
   modalContent: React.ReactNode | null;
   closeModal: () => void;
@@ -88,6 +90,8 @@ export function WorkspaceLayout({
   languages,
   onLanguageChange,
   showThemeToggle = true,
+  derivedNames,
+  onDeleteVariable,
   isModalOpen,
   modalContent,
   closeModal
@@ -172,6 +176,19 @@ export function WorkspaceLayout({
                               {variableTypeLabel(variable.type)}
                             </span>
                             <span className="truncate text-xs font-semibold">{variable.name}</span>
+                            {derivedNames?.has(variable.name) && onDeleteVariable ? (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onDeleteVariable(variable.name);
+                                }}
+                                className="ml-auto flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-slate-400 hover:bg-red-100 hover:text-red-500"
+                                aria-label={`Delete ${variable.name}`}
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            ) : null}
                           </div>
                         </button>
                       );
@@ -193,6 +210,8 @@ export function WorkspaceLayout({
                 onDoubleClick={(name: string) => onActivateVariable?.(name)}
                 datasetId={selectedDataset?.id ?? null}
                 datasetName={selectedDataset?.name ?? null}
+                derivedNames={derivedNames}
+                onDeleteVariable={onDeleteVariable}
                 borderless
               />
             )
@@ -224,6 +243,8 @@ export function WorkspaceLayout({
       showDatasetPopover,
       t,
       variables,
+      derivedNames,
+      onDeleteVariable,
     ]
   );
 

@@ -23,6 +23,8 @@ export interface DataWorkspaceProps {
   showThemeToggle?: boolean;
   defaultTheme?: "light" | "dark";
   defaultLanguage?: string;
+  derivedNames?: Set<string>;
+  onDeleteVariable?: (name: string) => void;
 }
 
 function useWorkspaceSnapshot() {
@@ -99,7 +101,9 @@ export function DataWorkspace({
   showDatasetPopover = true,
   showThemeToggle = true,
   defaultTheme = "light",
-  defaultLanguage = "en"
+  defaultLanguage = "en",
+  derivedNames,
+  onDeleteVariable
 }: DataWorkspaceProps) {
   const { dataset, variables, theme, language, activePluginId, modalContent, isModalOpen } = useWorkspaceSnapshot();
   const setDataset = useWorkspaceStore((state) => state.setDataset);
@@ -332,6 +336,8 @@ export function DataWorkspace({
           onDeleteDataset={handleDeleteDataset}
           showDatasetPopover={showDatasetPopover}
           showThemeToggle={showThemeToggle}
+          derivedNames={derivedNames}
+          onDeleteVariable={onDeleteVariable}
           theme={theme}
           onToggleTheme={handleToggleTheme}
           language={language}
