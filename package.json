@@ -1,6 +1,6 @@
 {
   "name": "@winm2m/react-data-workspace",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Composable data workspace shell that embeds @winm2m/react-stats-ui plugins",
   "type": "module",
   "main": "dist/index.cjs",
@@ -55,7 +55,7 @@
     "xlsx": "^0.18.5"
   },
   "peerDependencies": {
-    "@winm2m/react-stats-ui": ">=0.8.0",
+    "@winm2m/react-stats-ui": ">=0.8.3",
     "i18next": ">=23.0.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
@@ -63,7 +63,7 @@
     "zustand": ">=4.0.0"
   },
   "devDependencies": {
-    "@winm2m/react-stats-ui": "^0.8.1",
+    "@winm2m/react-stats-ui": "^0.8.3",
     "i18next": "^26.0.3",
     "react-i18next": "^17.0.2",
     "zustand": "^5.0.12",

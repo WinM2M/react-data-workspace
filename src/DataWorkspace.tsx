@@ -20,6 +20,7 @@ export interface DataWorkspaceProps {
   initialData?: Record<string, unknown>[];
   plugins: WorkspacePlugin[];
   showDatasetPopover?: boolean;
+  showThemeToggle?: boolean;
   defaultTheme?: "light" | "dark";
   defaultLanguage?: string;
 }
@@ -96,6 +97,7 @@ export function DataWorkspace({
   initialData = [],
   plugins,
   showDatasetPopover = true,
+  showThemeToggle = true,
   defaultTheme = "light",
   defaultLanguage = "en"
 }: DataWorkspaceProps) {
@@ -329,6 +331,7 @@ export function DataWorkspace({
           onFileInput={handleFileInput}
           onDeleteDataset={handleDeleteDataset}
           showDatasetPopover={showDatasetPopover}
+          showThemeToggle={showThemeToggle}
           theme={theme}
           onToggleTheme={handleToggleTheme}
           language={language}
