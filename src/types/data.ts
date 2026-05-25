@@ -1,6 +1,7 @@
 export type VariableMetadata = {
   name: string;
   type: "continuous" | "nominal" | "unknown";
+  originalLabel?: string;
 };
 
 export type WorkspaceDataset = {

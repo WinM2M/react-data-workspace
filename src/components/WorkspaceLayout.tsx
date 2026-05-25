@@ -19,7 +19,9 @@ export type WorkspaceLayoutProps = {
   onSelectPlugin: (pluginId: string) => void;
   variables: VariableMeta[];
   selectedVariableName?: string | null;
+  selectedVariableNames?: string[];
   onSelectVariable?: (variableName: string) => void;
+  onSelectVariableNamesChange?: (variableNames: string[]) => void;
   onActivateVariable?: (variableName: string) => void;
   datasets: Dataset[];
   selectedDatasetId: string | null;
@@ -38,6 +40,7 @@ export type WorkspaceLayoutProps = {
   showThemeToggle?: boolean;
   derivedNames?: Set<string>;
   onDeleteVariable?: (name: string) => void;
+  secondaryLabelByName?: Record<string, string>;
   isModalOpen: boolean;
   modalContent: React.ReactNode | null;
   closeModal: () => void;
@@ -73,7 +76,9 @@ export function WorkspaceLayout({
   onSelectPlugin,
   variables,
   selectedVariableName = null,
+  selectedVariableNames,
   onSelectVariable,
+  onSelectVariableNamesChange,
   onActivateVariable,
   datasets,
   selectedDatasetId,
@@ -92,6 +97,7 @@ export function WorkspaceLayout({
   showThemeToggle = true,
   derivedNames,
   onDeleteVariable,
+  secondaryLabelByName,
   isModalOpen,
   modalContent,
   closeModal
@@ -104,6 +110,38 @@ export function WorkspaceLayout({
   );
   const isDark = theme === "dark";
   const [isMobileVariableOpen, setIsMobileVariableOpen] = React.useState(false);
+  const [rightPanelWidth, setRightPanelWidth] = React.useState(320);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = Number(window.localStorage.getItem("workspace:right-panel-width") ?? "");
+    if (Number.isFinite(saved) && saved >= 260 && saved <= 640) {
+      setRightPanelWidth(saved);
+    }
+  }, []);
+
+  const beginResize = React.useCallback((event: React.MouseEvent) => {
+    event.preventDefault();
+    const startX = event.clientX;
+    const startWidth = rightPanelWidth;
+    let latestWidth = startWidth;
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      const delta = startX - moveEvent.clientX;
+      const nextWidth = Math.min(640, Math.max(260, startWidth + delta));
+      latestWidth = nextWidth;
+      setRightPanelWidth(nextWidth);
+    };
+
+    const onMouseUp = () => {
+      window.localStorage.setItem("workspace:right-panel-width", String(latestWidth));
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+  }, [rightPanelWidth]);
 
   const renderVariablePanel = React.useCallback(
     (mobile = false) => {
@@ -206,12 +244,15 @@ export function WorkspaceLayout({
                 heading={t("workspace.variablePanel")}
                 emptyLabel={t("workspace.noVariable")}
                 selectedName={selectedVariableName}
+                selectedNames={selectedVariableNames}
                 onSelect={(name: string) => onSelectVariable?.(name)}
+                onSelectionChange={onSelectVariableNamesChange}
                 onDoubleClick={(name: string) => onActivateVariable?.(name)}
                 datasetId={selectedDataset?.id ?? null}
                 datasetName={selectedDataset?.name ?? null}
                 derivedNames={derivedNames}
                 onDeleteVariable={onDeleteVariable}
+                secondaryLabelByName={secondaryLabelByName}
                 borderless
               />
             )
@@ -236,6 +277,7 @@ export function WorkspaceLayout({
       onDropDataset,
       onSelectDataset,
       onSelectVariable,
+      onSelectVariableNamesChange,
       onUploadDataset,
       selectedDataset,
       selectedDatasetId,
@@ -245,6 +287,8 @@ export function WorkspaceLayout({
       variables,
       derivedNames,
       onDeleteVariable,
+      secondaryLabelByName,
+      selectedVariableNames,
     ]
   );
 
@@ -418,14 +462,25 @@ export function WorkspaceLayout({
                 )}
               </div>
             </div>
-            <aside
-              className={cn(
-                "hidden w-80 overflow-auto border-l p-4 md:block",
-                isDark ? "border-slate-800 bg-slate-900 text-slate-100" : "border-slate-200 bg-slate-50 text-slate-900"
-              )}
-            >
-              {renderVariablePanel()}
-            </aside>
+              <aside
+                className={cn(
+                  "relative hidden overflow-auto border-l p-4 md:block",
+                  isDark ? "border-slate-800 bg-slate-900 text-slate-100" : "border-slate-200 bg-slate-50 text-slate-900"
+                )}
+                style={{ width: `${rightPanelWidth}px` }}
+              >
+                <button
+                  type="button"
+                  onMouseDown={beginResize}
+                  className={cn(
+                    "absolute left-0 top-1/2 z-10 h-24 w-2 -translate-x-1/2 -translate-y-1/2 cursor-col-resize rounded-full border",
+                    isDark ? "border-slate-700 bg-slate-800/90" : "border-slate-300 bg-white/90"
+                  )}
+                  aria-label="Resize variable panel"
+                  title="전역 변수 패널 너비 조절"
+                />
+                {renderVariablePanel()}
+              </aside>
           </section>
         </main>
       </div>

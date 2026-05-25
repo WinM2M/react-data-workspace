@@ -117,6 +117,7 @@ export function DataWorkspace({
   const [availableDatasets, setAvailableDatasets] = React.useState<WorkspaceDataset[]>([]);
   const [selectedDatasetId, setSelectedDatasetId] = React.useState<string | null>(null);
   const [selectedVariable, setSelectedVariable] = React.useState<string | null>(null);
+  const [selectedVariables, setSelectedVariables] = React.useState<string[]>([]);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -213,6 +214,7 @@ export function DataWorkspace({
 
   React.useEffect(() => {
     setSelectedVariable(null);
+    setSelectedVariables([]);
   }, [selectedDatasetId]);
 
   React.useEffect(() => {
@@ -314,6 +316,12 @@ export function DataWorkspace({
   );
 
   const workspaceRootClass = React.useMemo(() => cn("h-full w-full", theme === "dark" && "dark"), [theme]);
+  const secondaryLabelByName = React.useMemo(() => {
+    const entries = variables
+      .filter((variable) => variable.originalLabel && variable.originalLabel !== variable.name)
+      .map((variable) => [variable.name, variable.originalLabel as string]);
+    return Object.fromEntries(entries);
+  }, [variables]);
 
   return (
     <I18nextProvider i18n={i18nInstance}>
@@ -324,8 +332,11 @@ export function DataWorkspace({
           onSelectPlugin={setActivePlugin}
           variables={variables}
           selectedVariableName={selectedVariable}
+          selectedVariableNames={selectedVariables}
           onSelectVariable={setSelectedVariable}
+          onSelectVariableNamesChange={setSelectedVariables}
           onActivateVariable={handleVariableActivate}
+          secondaryLabelByName={secondaryLabelByName}
           datasets={availableDatasets}
           selectedDatasetId={selectedDatasetId}
           onSelectDataset={setSelectedDatasetId}
