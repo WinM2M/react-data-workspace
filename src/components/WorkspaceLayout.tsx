@@ -355,7 +355,7 @@ export function WorkspaceLayout({
           ) : null}
         </aside>
 
-        <main className="flex min-h-0 flex-1 flex-col">
+        <main className="flex min-h-0 min-w-0 flex-1 flex-col">
           {fileInputRef ? (
             <input ref={fileInputRef} type="file" accept=".xlsx,.json" onChange={onFileInput} hidden />
           ) : null}
@@ -435,20 +435,20 @@ export function WorkspaceLayout({
             {isMobileVariableOpen ? <div className="mt-3">{renderVariablePanel(true)}</div> : null}
           </section>
 
-          <section className={cn("flex min-h-0 flex-1 flex-col md:flex-row md:divide-x", isDark ? "md:divide-slate-800" : "md:divide-slate-200")}>
+          <section className={cn("flex min-h-0 min-w-0 flex-1 flex-col md:flex-row md:divide-x", isDark ? "md:divide-slate-800" : "md:divide-slate-200")}>
             <div
               className={cn(
-                "flex min-h-0 flex-1 flex-col overflow-hidden p-3 md:p-6",
+                "flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden p-3 md:p-6",
                 isDark ? "bg-slate-900 text-slate-100" : "bg-white text-slate-900"
               )}
             >
-              <div className="h-full min-h-0 overflow-auto">
+              <div className="h-full min-h-0 w-full min-w-0 overflow-auto">
                 {plugins.map((plugin) => {
                   const isActive = plugin.id === activePlugin?.id;
                   return plugin.renderView ? (
                     <div
                       key={plugin.id}
-                      className="min-h-full"
+                      className="min-h-full min-w-0"
                       style={{ display: isActive ? undefined : "none" }}
                     >
                       <PluginViewSlot plugin={plugin} />

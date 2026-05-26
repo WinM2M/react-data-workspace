@@ -71,7 +71,7 @@ export function createStatsWorkbenchPlugin(options: StatsWorkbenchPluginOptions 
     }, [dataset, variables, ready]);
 
     return ready ? (
-      <div className={cn("h-full w-full overflow-auto", currentTheme === "dark" && "dark bg-slate-950 text-slate-100")}> 
+      <div className={cn("h-full w-full min-w-0 overflow-auto", currentTheme === "dark" && "dark bg-slate-950 text-slate-100")}> 
         <StatsWorkbench
           ref={workbenchRef}
           hideInternalVariableList
