@@ -1,6 +1,6 @@
 import * as React from "react";
 import { I18nextProvider } from "react-i18next";
-import { StatsWorkbench, type StatsWorkbenchControl } from "@winm2m/react-stats-ui";
+import { StatsWorkbench, type StatsWorkbenchControl, type SupportedLanguage } from "@winm2m/react-stats-ui";
 import { BarChart3 } from "lucide-react";
 import { WorkspaceLayout } from "./components/WorkspaceLayout";
 import { initWorkspaceI18n, SUPPORTED_LANGUAGES } from "./i18n";
@@ -42,7 +42,27 @@ type StatsWorkbenchPluginOptions = {
   id?: string;
   name?: string;
   icon?: React.ReactNode;
+  /**
+   * Overrides the workspace's own language for the workbench.
+   *
+   * Only needed when the host drives its language somewhere other than the workspace
+   * store — an app with its own i18n, mounting this plugin inside an existing layout.
+   * Left out, the workbench follows the workspace, which is what the language selector
+   * in the header is for.
+   */
+  language?: SupportedLanguage;
 };
+
+/**
+ * The store keeps the language as a plain string. Both packages support the same nine,
+ * so this is a membership check rather than a cast — an unrecognised value falls through
+ * to the workbench's own default instead of being forced into a type it may not be.
+ */
+function asWorkbenchLanguage(value: string): SupportedLanguage | undefined {
+  return (SUPPORTED_LANGUAGES as readonly string[]).includes(value)
+    ? (value as SupportedLanguage)
+    : undefined;
+}
 
 export function createStatsWorkbenchPlugin(options: StatsWorkbenchPluginOptions = {}): WorkspacePlugin {
   const workbenchRef = React.createRef<StatsWorkbenchControl>();
@@ -51,6 +71,9 @@ export function createStatsWorkbenchPlugin(options: StatsWorkbenchPluginOptions 
     const dataset = useWorkspaceStore((state) => state.dataset);
     const variables = useWorkspaceStore((state) => state.variables);
     const currentTheme = useWorkspaceStore((state) => state.theme);
+    // The workbench defaulted to English no matter what the workspace was set to, so
+    // every one of its translations was unreachable through this plugin.
+    const workspaceLanguage = useWorkspaceStore((state) => state.language);
     const [ready, setReady] = React.useState(false);
 
     React.useEffect(() => {
@@ -76,6 +99,7 @@ export function createStatsWorkbenchPlugin(options: StatsWorkbenchPluginOptions 
           ref={workbenchRef}
           hideInternalVariableList
           showDatasetPopover={false}
+          language={options.language ?? asWorkbenchLanguage(workspaceLanguage)}
           className="h-full w-full"
           data-theme={currentTheme}
         />
