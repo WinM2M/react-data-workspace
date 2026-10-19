@@ -44,4 +44,20 @@ describe("DataWorkspace", () => {
     renderWorkspace({ defaultLanguage: "ko" });
     expect(await screen.findByText("데이터셋이 없습니다")).toBeInTheDocument();
   });
+
+  it("shows the variable panel by default", async () => {
+    renderWorkspace();
+    await screen.findByTestId("mock-view");
+    expect(screen.getByRole("button", { name: /resize variable panel/i })).toBeInTheDocument();
+  });
+
+  it("drops the variable panel whole when showVariableList is false", async () => {
+    // Dropped, not hidden. A host that overlays it would leave the panel's own
+    // controls — double-click to activate, the delete button on a derived
+    // variable — reachable by keyboard while invisible, and would keep the width
+    // the panel reserves. Both are why this is a prop rather than host CSS.
+    renderWorkspace({ showVariableList: false });
+    await screen.findByTestId("mock-view");
+    expect(screen.queryByRole("button", { name: /resize variable panel/i })).not.toBeInTheDocument();
+  });
 });

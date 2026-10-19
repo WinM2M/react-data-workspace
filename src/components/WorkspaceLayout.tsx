@@ -38,6 +38,7 @@ export type WorkspaceLayoutProps = {
   languages: LanguageOption[];
   onLanguageChange: (lang: string) => void;
   showThemeToggle?: boolean;
+  showVariableList?: boolean;
   derivedNames?: Set<string>;
   onDeleteVariable?: (name: string) => void;
   secondaryLabelByName?: Record<string, string>;
@@ -95,6 +96,7 @@ export function WorkspaceLayout({
   languages,
   onLanguageChange,
   showThemeToggle = true,
+  showVariableList = true,
   derivedNames,
   onDeleteVariable,
   secondaryLabelByName,
@@ -462,6 +464,9 @@ export function WorkspaceLayout({
                 )}
               </div>
             </div>
+            {/* The panel is dropped whole, not hidden — the resize handle and the
+                reserved width go with it, so the view gets the space back. */}
+            {showVariableList ? (
               <aside
                 className={cn(
                   "relative hidden overflow-auto border-l p-4 md:block",
@@ -481,6 +486,7 @@ export function WorkspaceLayout({
                 />
                 {renderVariablePanel()}
               </aside>
+            ) : null}
           </section>
         </main>
       </div>

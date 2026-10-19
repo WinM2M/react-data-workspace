@@ -21,6 +21,16 @@ export interface DataWorkspaceProps {
   plugins: WorkspacePlugin[];
   showDatasetPopover?: boolean;
   showThemeToggle?: boolean;
+  /**
+   * Shows the global variable panel on the right. Defaults to `true`.
+   *
+   * A host that already lists the columns in its own screen does not want a second
+   * list of them. Hiding it belongs here rather than in the host's CSS, because the
+   * panel carries behaviour — double-click activates a variable, derived variables
+   * can be deleted from it — and an overlay would leave those reachable by keyboard
+   * while invisible.
+   */
+  showVariableList?: boolean;
   defaultTheme?: "light" | "dark";
   defaultLanguage?: string;
   derivedNames?: Set<string>;
@@ -124,6 +134,7 @@ export function DataWorkspace({
   plugins,
   showDatasetPopover = true,
   showThemeToggle = true,
+  showVariableList = true,
   defaultTheme = "light",
   defaultLanguage = "en",
   derivedNames,
@@ -371,6 +382,7 @@ export function DataWorkspace({
           onDeleteDataset={handleDeleteDataset}
           showDatasetPopover={showDatasetPopover}
           showThemeToggle={showThemeToggle}
+          showVariableList={showVariableList}
           derivedNames={derivedNames}
           onDeleteVariable={onDeleteVariable}
           theme={theme}
