@@ -450,7 +450,12 @@ export function WorkspaceLayout({
                   return plugin.renderView ? (
                     <div
                       key={plugin.id}
-                      className="min-h-full min-w-0"
+                      className={cn(
+                        "min-w-0",
+                        // 기본은 늘어나고 바깥이 스크롤한다. 스스로 높이를
+                        // 나누는 화면만 「주어진 높이」를 받는다.
+                        plugin.fitsViewport ? "h-full" : "min-h-full"
+                      )}
                       style={{ display: isActive ? undefined : "none" }}
                     >
                       <PluginViewSlot plugin={plugin} />
